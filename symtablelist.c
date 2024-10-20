@@ -6,6 +6,7 @@ Author: David Wang
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 #include "symtable.h"
 
 /*
@@ -65,7 +66,7 @@ void SymTable_free(SymTable_T oSymTable)
         psCurrentNode = psNextNode)
     {
         psNextNode = psCurrentNode->psNextNode;
-        free(psCurrentNode->pcKey);
+        free((char *) psCurrentNode->pcKey);
         free(psCurrentNode);
     }
 
@@ -93,7 +94,7 @@ int SymTable_put(SymTable_T oSymTable,
     psNewNode->pcKey = (const char*)malloc(strlen(pcKey)+1);
     if (psNewNode->pcKey == NULL)
         return 0;
-    strcpy(psNewNode->pcKey, pcKey);
+    strcpy((char *) psNewNode->pcKey, pcKey);
 
     /* assign value */
     psNewNode->pvValue = pvValue;
@@ -142,7 +143,7 @@ void *SymTable_replace(SymTable_T oSymTable,
     }
     pvOldValue = node->pvValue;
     node->pvValue = pvValue;
-    return pvOldValue;
+    return (void *) pvOldValue;
 }
 
 
@@ -170,7 +171,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey)
     if (node==NULL) {
         return NULL;
     }
-    return node->pvValue;
+    return (void *) node->pvValue;
 }
 
 
@@ -197,7 +198,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
                 pvValue = psCurrentNode->pvValue;
                 psPrevNode->psNextNode = psCurrentNode->psNextNode;
             }
-            free(psCurrentNode->pcKey);
+            free((char *) psCurrentNode->pcKey);
             free(psCurrentNode);
             /* decrement length of SymTable */
             oSymTable->length -= 1;
