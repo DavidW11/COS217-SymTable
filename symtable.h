@@ -5,6 +5,7 @@ author: David Wang
 
 #ifndef SYMTABLE_INCLUDED
 #define SYMTABLE_INCLUDED
+#include <stddef.h>
 
 typedef struct SymTable* SymTable_T;
 
