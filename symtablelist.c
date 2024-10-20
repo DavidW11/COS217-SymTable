@@ -86,6 +86,10 @@ int SymTable_put(SymTable_T oSymTable,
 
     assert(oSymTable != NULL);
 
+    /* check if SymTable already contains key */
+    if (SymTable_contains(oSymTable, pcKey))
+        return 0;
+    
     psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));
     if (psNewNode == NULL)
         return 0;
