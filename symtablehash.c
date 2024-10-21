@@ -9,6 +9,10 @@ Author: David Wang
 #include <stddef.h>
 #include "symtable.h"
 
+static const size_t auBucketCounts[] = 
+    {509, 1021, 2039, 4093, 8191, 16381, 32749, 65521};
+static const size_t numBucketCounts = 
+    sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
 /* Each item is stored in a SymTableNode. SymTableNodes are linked to
    form a list.  */
@@ -36,6 +40,10 @@ struct SymTable
 
     /* The number of buckets in the SymTable */
     size_t uBucketCount;
+    
+    /* The index of the current bucket count in the 
+        global array of bucket counts*/
+    size_t uBucketCountIndex;
 };
 
 
@@ -123,11 +131,64 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 }
 
 
+int SymTable_expand(SymTable_T oSymTable) {
+    size_t i;
+    size_t oldBucketCount;
+    size_t newBucketCount;
+    struct SymTableNode **ppsNewArray;
+
+    struct SymTableNode *psCurrentNode;
+    size_t uNewHash;
+
+    /* check that bucket count is not at maximum */
+    if (oSymTable->uBucketCountIndex = numBucketCounts-1)
+        return 0;
+    
+    oldBucketCount = auBucketCounts[oSymTable->uBucketCountIndex];
+    newBucketCount = auBucketCounts[oSymTable->uBucketCountIndex+1];
+
+    /* allocate memory for newly-sized array of pointers */
+    ppsNewArray = (struct SymTableNode **) 
+        calloc(newBucketCount, sizeof(struct SymTableNode *));
+    if (ppsNewArray == NULL)
+        return 0;
+
+    /* initialize newly allocated memory to NULL pointers */
+    for(i=0; i<newBucketCount; i++) {
+        ppsNewArray[i] = NULL;
+    }
+
+    /* put bindings in new array */
+    for(i=0; i<oldBucketCount; i++) {
+        for(psCurrentNode = oSymTable->ppsArray[i];
+            psCurrentNode != NULL;
+            psCurrentNode = psCurrentNode->psNextNode) 
+        {
+            /* put binding into new array */
+            uNewHash = SymTable_hash(psCurrentNode->pcKey, 
+                newBucketCount);
+            psCurrentNode->psNextNode = ppsNewArray[uNewHash];
+            ppsNewArray[uNewHash] = psCurrentNode;
+        }
+        oSymTable->ppsArray[i] = NULL;
+    }
+
+    /* free pointer to old array, 
+    assign new array and bucket count index */
+    free(oSymTable->ppsArray);
+    oSymTable->ppsArray = ppsNewArray;
+    oSymTable->uBucketCountIndex += 1;
+    
+    /* take out */
+    oSymTable->uBucketCount = newBucketCount;
+
+    return 1;
+}
+
+
 int SymTable_put(SymTable_T oSymTable, 
     const char *pcKey, const void *pvValue)
 {
-    /* expansion code here */
-
     size_t bucketIndex;
     struct SymTableNode *psNewNode;
 
@@ -136,6 +197,10 @@ int SymTable_put(SymTable_T oSymTable,
     /* check if SymTable already contains key */
     if (SymTable_contains(oSymTable, pcKey))
         return 0;
+    
+    /* expand SymTable if necessary */
+    if (oSymTable->length == oSymTable->uBucketCount)
+        SymTable_expand(oSymTable);
     
     bucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
 
