@@ -84,6 +84,7 @@ SymTable_T SymTable_new(void)
         oSymTable->ppsArray[i] = NULL;
     }
     oSymTable->uBucketCount = 509;
+    oSymTable->uBucketCountIndex = 0;
     oSymTable->length = 0;
     return oSymTable;
 }
