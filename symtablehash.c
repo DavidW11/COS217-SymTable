@@ -162,14 +162,14 @@ int SymTable_expand(SymTable_T oSymTable) {
 
     /* put bindings in new array */
     for(i=0; i<oldBucketCount; i++) {
-        printf("CURRENT BUCKET: %u, ", i);
+        printf("CURRENT BUCKET: %u, ", (unsigned int) i);
         for(psCurrentNode = oSymTable->ppsArray[i];
             psCurrentNode != NULL;
             psCurrentNode = psCurrentNode->psNextNode) 
         {
             uNewHash = SymTable_hash(psCurrentNode->pcKey, 
                 newBucketCount);
-            printf("%s, %u", psCurrentNode->pcKey, uNewHash);
+            /* printf("%s, %u", psCurrentNode->pcKey, uNewHash); */
             psCurrentNode->psNextNode = ppsNewArray[uNewHash];
             ppsNewArray[uNewHash] = psCurrentNode;
         }
