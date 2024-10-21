@@ -111,12 +111,13 @@ int SymTable_put(SymTable_T oSymTable,
     return 1;
 }
 
+
 /*
 helper function ...
 return a pointer to the symbol table node with the same key, 
 or NULL if such a key does not exist in the symbol table.
 */
-struct SymTableNode *getSymTableNode(SymTable_T oSymTable, const char *pcKey)
+struct SymTableNode *SymTable_getNode(SymTable_T oSymTable, const char *pcKey)
 {
     struct SymTableNode *psCurrentNode;
 
@@ -141,7 +142,7 @@ void *SymTable_replace(SymTable_T oSymTable,
 
     assert(oSymTable != NULL);
 
-    node = getSymTableNode(oSymTable, pcKey);
+    node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
         return NULL;
     }
@@ -157,7 +158,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey)
 
     assert(oSymTable != NULL);
 
-    node = getSymTableNode(oSymTable, pcKey);
+    node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
         return 0;
     }
@@ -171,7 +172,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey)
 
     assert(oSymTable != NULL);
 
-    node = getSymTableNode(oSymTable, pcKey);
+    node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
         return NULL;
     }
