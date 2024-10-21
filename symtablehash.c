@@ -7,6 +7,7 @@ Author: David Wang
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "symtable.h"
 
 static const size_t auBucketCounts[] = 
@@ -161,14 +162,14 @@ int SymTable_expand(SymTable_T oSymTable) {
 
     /* put bindings in new array */
     for(i=0; i<oldBucketCount; i++) {
-        printf("CURRENT BUCKET: %i, ", i);
+        printf("CURRENT BUCKET: %u, ", i);
         for(psCurrentNode = oSymTable->ppsArray[i];
             psCurrentNode != NULL;
             psCurrentNode = psCurrentNode->psNextNode) 
         {
             uNewHash = SymTable_hash(psCurrentNode->pcKey, 
                 newBucketCount);
-            printf("%s, %i", psCurrentNode->pcKey, uNewHash);
+            printf("%s, %u", psCurrentNode->pcKey, uNewHash);
             psCurrentNode->psNextNode = ppsNewArray[uNewHash];
             ppsNewArray[uNewHash] = psCurrentNode;
         }
