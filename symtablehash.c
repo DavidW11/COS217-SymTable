@@ -169,7 +169,7 @@ int SymTable_expand(SymTable_T oSymTable) {
         {
             uNewHash = SymTable_hash(psCurrentNode->pcKey, 
                 newBucketCount);
-            /* printf("%s, %u", psCurrentNode->pcKey, uNewHash); */
+            printf("%u", uNewHash);
             psCurrentNode->psNextNode = ppsNewArray[uNewHash];
             ppsNewArray[uNewHash] = psCurrentNode;
         }
