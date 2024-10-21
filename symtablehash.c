@@ -128,16 +128,14 @@ int SymTable_put(SymTable_T oSymTable,
 
     size_t bucketIndex;
     struct SymTableNode *psNewNode;
-    struct SymTableNode *psFirstNode;
 
     assert(oSymTable != NULL);
-    
-    bucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    psFirstNode = oSymTable->ppsArray[bucketIndex];
 
     /* check if SymTable already contains key */
     if (SymTable_contains(oSymTable, pcKey))
         return 0;
+    
+    bucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
 
     psNewNode = (struct SymTableNode*)
         malloc(sizeof(struct SymTableNode));
@@ -154,8 +152,8 @@ int SymTable_put(SymTable_T oSymTable,
     psNewNode->pvValue = pvValue;
 
     /* insert binding to beginning of linked list */
-    psNewNode->psNextNode = psFirstNode;
-    psFirstNode = psNewNode;
+    psNewNode->psNextNode = oSymTable->ppsArray[bucketIndex];
+    oSymTable->ppsArray[bucketIndex] = psNewNode;
     /* increment length of SymTable */
     oSymTable->length += 1;
     return 1;
