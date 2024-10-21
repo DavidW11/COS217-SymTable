@@ -250,7 +250,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
             if (psPrevNode==NULL) {
                 /* condition that we remove the first node */
                 pvValue = psCurrentNode->pvValue;
-                psCurrentNode = psCurrentNode->psNextNode;
+                oSymTable->ppsArray[bucketIndex] = 
+                    psCurrentNode->psNextNode;
             }
             else {
                 pvValue = psCurrentNode->pvValue;
@@ -297,7 +298,7 @@ void SymTable_map(SymTable_T oSymTable,
     /* iterate through buckets */
     for(i=0; i<oSymTable->uBucketCount; i++) {
         /* iterate through linked list */
-        for (psCurrentNode = *(oSymTable->ppsArray) + i;
+        for (psCurrentNode = oSymTable->ppsArray[i];
             psCurrentNode != NULL;
             psCurrentNode = psCurrentNode->psNextNode)
         (*pfApply)(psCurrentNode->pcKey, (void*)psCurrentNode->pvValue, 
