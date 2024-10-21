@@ -84,13 +84,15 @@ SymTable_T SymTable_new(void)
 void SymTable_freeBucket(struct SymTableNode *psFirstNode)
 {
     struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
 
     assert(psFirstNode != NULL);
 
     for (psCurrentNode = psFirstNode;
         psCurrentNode != NULL;
-        psCurrentNode = psCurrentNode->psNextNode)
+        psCurrentNode = psNextNode)
     {
+        psNextNode = psCurrentNode->psNextNode;
         free((char *) psCurrentNode->pcKey);
         free(psCurrentNode);
     }
