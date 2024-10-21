@@ -140,6 +140,7 @@ int SymTable_expand(SymTable_T oSymTable) {
     struct SymTableNode **ppsNewArray;
 
     struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
     size_t uNewHash;
 
     /* check that bucket count is not at maximum */
@@ -165,11 +166,13 @@ int SymTable_expand(SymTable_T oSymTable) {
         printf("CURRENT BUCKET: %u, ", (unsigned int) i);
         for(psCurrentNode = oSymTable->ppsArray[i];
             psCurrentNode != NULL;
-            psCurrentNode = psCurrentNode->psNextNode) 
+            psCurrentNode = psNextNode) 
         {
+            psNextNode = psCurrentNode->psNextNode;
+            
             uNewHash = SymTable_hash(psCurrentNode->pcKey, 
                 newBucketCount);
-            printf("%u", uNewHash);
+            printf("%u, ", (unsigned int) uNewHash);
             psCurrentNode->psNextNode = ppsNewArray[uNewHash];
             ppsNewArray[uNewHash] = psCurrentNode;
         }
