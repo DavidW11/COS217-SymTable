@@ -141,7 +141,7 @@ int SymTable_expand(SymTable_T oSymTable) {
     size_t uNewHash;
 
     /* check that bucket count is not at maximum */
-    if (oSymTable->uBucketCountIndex = numBucketCounts-1)
+    if (oSymTable->uBucketCountIndex == numBucketCounts-1)
         return 0;
     
     oldBucketCount = auBucketCounts[oSymTable->uBucketCountIndex];
@@ -178,7 +178,7 @@ int SymTable_expand(SymTable_T oSymTable) {
     free(oSymTable->ppsArray);
     oSymTable->ppsArray = ppsNewArray;
     oSymTable->uBucketCountIndex += 1;
-    
+
     /* take out */
     oSymTable->uBucketCount = newBucketCount;
 
