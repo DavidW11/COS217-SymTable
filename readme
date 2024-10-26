@@ -2,7 +2,7 @@ Assignment 3 readme File
 
 ------------------------------------------------------------------------
 What is your name?
-
+David Wang
 
 
 ------------------------------------------------------------------------
@@ -36,7 +36,7 @@ enter your name in the space below the following affirmation:
 This paper represents my own work in accordance with University
 regulations.
 
-
+David Wang
 
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
@@ -64,7 +64,16 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+    symtablelist.c: line 80: medium priority:
+    Do you want to validate 'pvValue' through an assert?
 
+    symtablelist.c: line 138: medium priority:
+    Do you want to validate 'pvValue' through an assert?
+
+    symtablelist.c: line 223: medium priority:
+    Do you want to validate 'pvExtra' through an assert?
+
+Here
 
 ------------------------------------------------------------------------
 What warnings does splint generate on symtablehash.c, and what are your

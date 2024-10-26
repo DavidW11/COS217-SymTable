@@ -200,6 +200,7 @@ int SymTable_put(SymTable_T oSymTable,
     struct SymTableNode *psNewNode;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     /* check if SymTable already contains key */
     if (SymTable_contains(oSymTable, pcKey))
@@ -247,6 +248,7 @@ static struct SymTableNode *SymTable_getNode(SymTable_T oSymTable,
     size_t bucketIndex;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     bucketIndex = SymTable_hash(pcKey, 
         auBucketCounts[oSymTable->uBucketCountIndex]);
@@ -269,6 +271,7 @@ void *SymTable_replace(SymTable_T oSymTable,
     const void *pvOldValue;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -285,6 +288,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey)
     struct SymTableNode *node;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -299,6 +303,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey)
     struct SymTableNode *node;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -316,6 +321,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
     const void *pvValue;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     bucketIndex = SymTable_hash(pcKey, 
         auBucketCounts[oSymTable->uBucketCountIndex]);
