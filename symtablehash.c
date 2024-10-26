@@ -10,8 +10,12 @@ Author: David Wang
 #include <stdio.h>
 #include "symtable.h"
 
+
+/* possible values for the number of buckets in the symbol table */
 static const size_t auBucketCounts[] = 
     {509, 1021, 2039, 4093, 8191, 16381, 32749, 65521};
+/* number of possible values for the bucket count 
+(length of auBucketCounts array) */
 static const size_t numBucketCounts = 
     sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
@@ -30,7 +34,7 @@ struct SymTableNode
 };
 
 
-/* A SymTable is a "dummy" node that points to the first SymTableNode. */
+/* A SymTable is a "dummy" node that points to the first SymTableNode.*/
 struct SymTable
 {
     /* Pointer to the first element of the array of pointers. */
@@ -88,7 +92,9 @@ SymTable_T SymTable_new(void)
 }
 
 
-void SymTable_freeBucket(struct SymTableNode *psFirstNode)
+/* free memory allocated to the linked list of bindings starting with 
+the node pointed to by psFirstNode */
+static void SymTable_freeBucket(struct SymTableNode *psFirstNode)
 {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
@@ -130,7 +136,10 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 }
 
 
-int SymTable_expand(SymTable_T oSymTable) {
+/* If the bucket count is not already at the maximum value, expand
+oSymTable to the next highest bucket count.
+Otherwise, leave oSymTable unchanged. */
+static void SymTable_expand(SymTable_T oSymTable) {
     size_t i;
     size_t oldBucketCount;
     size_t newBucketCount;
@@ -142,7 +151,7 @@ int SymTable_expand(SymTable_T oSymTable) {
 
     /* check that bucket count is not at maximum */
     if (oSymTable->uBucketCountIndex == numBucketCounts-1)
-        return 0;
+        return;
     
     oldBucketCount = auBucketCounts[oSymTable->uBucketCountIndex];
     newBucketCount = auBucketCounts[oSymTable->uBucketCountIndex+1];
@@ -181,8 +190,6 @@ int SymTable_expand(SymTable_T oSymTable) {
     free(oSymTable->ppsArray);
     oSymTable->ppsArray = ppsNewArray;
     oSymTable->uBucketCountIndex += 1;
-
-    return 1;
 }
 
 
@@ -230,11 +237,11 @@ int SymTable_put(SymTable_T oSymTable,
 
 
 /*
-helper function ...
-return a pointer to the symbol table node with the same key, 
-or NULL if such a key does not exist in the symbol table.
+return a pointer to the SymTableNode in oSymTable whose key is pcKey. 
+If no matching key exists in the symbol table, return NULL.
 */
-struct SymTableNode *SymTable_getNode(SymTable_T oSymTable, const char *pcKey)
+static struct SymTableNode *SymTable_getNode(SymTable_T oSymTable, 
+    const char *pcKey)
 {
     struct SymTableNode *psCurrentNode;
     size_t bucketIndex;
@@ -340,6 +347,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
 }
 
 
+/* 
 int SymTable_isEmpty(SymTable_T oSymTable)
 {
     size_t i;
@@ -354,6 +362,7 @@ int SymTable_isEmpty(SymTable_T oSymTable)
     }
     return 1;
 }
+*/
 
 
 void SymTable_map(SymTable_T oSymTable,

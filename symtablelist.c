@@ -9,10 +9,6 @@ Author: David Wang
 #include <stddef.h>
 #include "symtable.h"
 
-/*
-assert statements to cover keys and values
-comments
-*/
 
 /* Each item is stored in a SymTableNode.  SymTableNodes are linked to
    form a list.  */
@@ -29,7 +25,7 @@ struct SymTableNode
 };
 
 
-/* A SymTable is a "dummy" node that points to the first SymTableNode. */
+/* A SymTable is a "dummy" node that points to the first SymTableNode.*/
 struct SymTable
 {
     /* The address of the first SymTableNode. */
@@ -85,12 +81,14 @@ int SymTable_put(SymTable_T oSymTable,
     struct SymTableNode *psNewNode;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     /* check if SymTable already contains key */
     if (SymTable_contains(oSymTable, pcKey))
         return 0;
     
-    psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));
+    psNewNode = (struct SymTableNode*)malloc(
+            sizeof(struct SymTableNode));
     if (psNewNode == NULL)
         return 0;
 
@@ -113,15 +111,16 @@ int SymTable_put(SymTable_T oSymTable,
 
 
 /*
-helper function ...
-return a pointer to the symbol table node with the same key, 
-or NULL if such a key does not exist in the symbol table.
+return a pointer to the SymTableNode in oSymTable whose key is pcKey. 
+If no matching key exists in the symbol table, return NULL.
 */
-struct SymTableNode *SymTable_getNode(SymTable_T oSymTable, const char *pcKey)
+static struct SymTableNode *SymTable_getNode(SymTable_T oSymTable, 
+    const char *pcKey)
 {
     struct SymTableNode *psCurrentNode;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
@@ -141,6 +140,7 @@ void *SymTable_replace(SymTable_T oSymTable,
     const void *pvOldValue;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -157,6 +157,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey)
     struct SymTableNode *node;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -171,6 +172,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey)
     struct SymTableNode *node;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     node = SymTable_getNode(oSymTable, pcKey);
     if (node==NULL) {
@@ -187,6 +189,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
     const void *pvValue;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode;
         psCurrentNode != NULL;
@@ -211,14 +214,6 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey)
         psPrevNode = psCurrentNode;
     }
     return NULL;
-}
-
-
-int SymTable_isEmpty(SymTable_T oSymTable)
-{
-   assert(oSymTable != NULL);
-
-   return oSymTable->psFirstNode == NULL;
 }
 
 
