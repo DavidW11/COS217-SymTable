@@ -206,10 +206,12 @@ int SymTable_put(SymTable_T oSymTable,
     if (SymTable_contains(oSymTable, pcKey))
         return 0;
     
-    /* expand SymTable if necessary */
+
+    /* expand SymTable if necessary 
     if (oSymTable->length == 
         auBucketCounts[oSymTable->uBucketCountIndex])
         SymTable_expand(oSymTable);
+    */
     
     bucketIndex = SymTable_hash(pcKey, 
         auBucketCounts[oSymTable->uBucketCountIndex]);
