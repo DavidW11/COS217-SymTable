@@ -160,7 +160,7 @@ static void SymTable_expand(SymTable_T oSymTable) {
     ppsNewArray = (struct SymTableNode **) 
         calloc(newBucketCount, sizeof(struct SymTableNode *));
     if (ppsNewArray == NULL)
-        return 0;
+        return;
 
     /* initialize newly allocated memory to NULL pointers */
     for(i=0; i<newBucketCount; i++) {
